@@ -3093,11 +3093,18 @@ function Library:Console()
 			['luau'] = function(source)
 				return loadstring(table.concat(source));
 			end,
+			
+			['exit'] = function()
+				Terminal.Enabled = false
+			end,
 		};
 		IsInType = false;
 		LastInput = nil
 	};
-
+	
+	ExitButton.MouseButton1Click:Connect(function()
+		Terminal.Enabled = not Terminal.Enabled;
+	end)
 
 	function overview:print(txt)
 		local lines = txt:split("\n")

@@ -215,7 +215,7 @@ function Library.new(config)
 			Twen:Create(Logo,TweenInfo1,{ImageTransparency = 1}):Play();
 
 			WindowTable.ElBlurUI.Enabled = false;
-			
+
 			task.delay(0.6,function()
 				if not WindowTable.WindowToggle then
 					Twen:Create(MainFrame,TweenInfo2,{Position = UDim2.fromScale(0.5,-0.15)}):Play();
@@ -960,12 +960,12 @@ function Library.new(config)
 			WindowTable.Dropdown.Value = Looped
 			if Looped then
 				DropdownFrame.Visible = true;
-				
+
 				Twen:Create(DropdownFrame,TweenInfo.new(0.15),{
 					Position = UDim2.fromOffset(Locked.AbsolutePosition.X + 5,Locked.AbsolutePosition.Y + (DropdownFrame.AbsoluteSize.Y / 1.5)),
 					Size = UDim2.fromOffset(Locked.AbsoluteSize.X,150)
 				}):Play()
-			
+
 			else
 				if Locked then
 					DropdownFrame.Size = DropdownFrame.Size:Lerp(UDim2.fromOffset(Locked.AbsoluteSize.X,0),.2);
@@ -2269,18 +2269,18 @@ Library.NewAuth = function(conf)
 		Auth = function(key) if key == '1 or 1' then return key; end; end,
 		Freeze = false,
 	});
-	
-	
+
+
 	if conf.Auth then
 		if debug.info(conf.Auth,'s') == '[C]' then
 			if error then
 				error('Error C');
 			end;
-			
+
 			return;
 		end;
 	end;
-	
+
 	if conf.GetKey then
 		if debug.info(conf.GetKey,'s') == '[C]' then
 			if error then
@@ -2290,7 +2290,7 @@ Library.NewAuth = function(conf)
 			return;
 		end;
 	end;
-	
+
 	local ScreenGui = Instance.new("ScreenGui")
 	local vaid = Instance.new('BindableEvent')
 	local Auth = Instance.new("Frame")
@@ -2320,7 +2320,7 @@ Library.NewAuth = function(conf)
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	ScreenGui.Name = game:GetService('HttpService'):GenerateGUID(false)..tostring(tick())
-	
+
 	Auth.Name = "Auth"
 	Auth.Parent = ScreenGui
 	Auth.Active = true
@@ -2347,7 +2347,7 @@ Library.NewAuth = function(conf)
 		Position = UDim2.new(0.5, 0, 0.5, 0),
 		Size = UDim2.new(1, 0, 1, 0)
 	}):Play();
-	
+
 	BlockFrame.Name = "BlockFrame"
 	BlockFrame.Parent = MainFrame
 	BlockFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2364,7 +2364,7 @@ Library.NewAuth = function(conf)
 
 	UIGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.00, 1.00), NumberSequenceKeypoint.new(0.05, 0.00), NumberSequenceKeypoint.new(0.96, 0.00), NumberSequenceKeypoint.new(1.00, 1.00)}
 	UIGradient.Parent = BlockFrame
-	
+
 	UICorner_2.CornerRadius = UDim.new(0, 7)
 	UICorner_2.Parent = MainFrame
 
@@ -2406,7 +2406,7 @@ Library.NewAuth = function(conf)
 	Twen:Create(UIStroke,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 		Transparency = 0.900
 	}):Play();
-	
+
 	TextBox.Parent = MainFrame
 	TextBox.AnchorPoint = Vector2.new(0.5, 0.5)
 	TextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -2525,34 +2525,34 @@ Library.NewAuth = function(conf)
 
 	UICorner_6.CornerRadius = UDim.new(0, 7)
 	UICorner_6.Parent = MainFrame
-	
+
 	local id = tostring(math.random(1,100))..tostring(math.random(1,100))..tostring(math.random(1,100))..tostring(math.random(1,100))..tostring(math.random(1,100))..tostring(math.random(1,100))..tostring(tick()):reverse();
-	
+
 	Button1.MouseButton1Click:Connect(function()
 		local str = conf.GetKey();
-		
+
 		if str then
 			if typeof(str) == 'string' then
 				local clip = getfenv()['toclipboard'] or getfenv()['setclipboard'] or getfenv()['print'];
-				
+
 				clip(str);
 			end;
 		end;
 	end);
-	
-	
+
+
 	Button2.MouseButton1Click:Connect(function()
 		local str = conf.Auth(TextBox.Text);
 
 		if str then
 			TextBox.Text = "*/*/*/*/*/*/*/*/*/*/*/*/*/*";
-			
+
 			vaid:Fire(id)
 		else
 			TextBox.Text = "";
 		end;
 	end);
-	
+
 	if conf.Freeze then
 		while ScreenGui do task.wait();
 			local ez = vaid.Event:Wait();
@@ -2562,27 +2562,27 @@ Library.NewAuth = function(conf)
 			end;
 		end;
 	end;
-	
+
 	return {
 		Close = function()
 			Twen:Create(MainDropShadow,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				ImageTransparency = 1
 			}):Play();
-			
-			
+
+
 			Twen:Create(MainFrame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				Size = UDim2.new(0.8,0,0.8,0)
 			}):Play();
-			
+
 			task.delay(1,function()
 				Twen:Create(MainFrame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 					Position = UDim2.new(0.5, 0, 1.5, 0),
 					Size = UDim2.new(0.8,0,0.8,0)
 				}):Play();
-				
+
 				task.delay(1.2,function()
 					ScreenGui:Destroy()
-					end)
+				end)
 			end)
 		end,
 	}
@@ -2592,14 +2592,14 @@ Library.Notification = function()
 	local Notification = Instance.new("ScreenGui")
 	local Frame = Instance.new("Frame")
 	local UIListLayout = Instance.new("UIListLayout")
-	
+
 	Notification.Name = "Notification"
 	Notification.Parent = CoreGui
 	Notification.ResetOnSpawn = false
 	Notification.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	Notification.Name = game:GetService('HttpService'):GenerateGUID(false)
 	Notification.IgnoreGuiInset = true
-	
+
 	Frame.Parent = Notification
 	Frame.AnchorPoint = Vector2.new(0.5, 0.5)
 	Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -2614,7 +2614,7 @@ Library.Notification = function()
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 	UIListLayout.Padding = UDim.new(0,2);
-	
+
 	return {
 		new = function(ctfx)
 			ctfx = Config(ctfx,{
@@ -2631,7 +2631,7 @@ Library.Notification = function()
 			local TextLabel = Instance.new("TextLabel")
 			local TextLabel_2 = Instance.new("TextLabel")
 			local DropShadow = Instance.new('ImageLabel')
-			
+
 			DropShadow.Name = "DropShadow"
 			DropShadow.Parent = Notifiy
 			DropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2648,7 +2648,7 @@ Library.Notification = function()
 			Twen:Create(DropShadow,css_style,{
 				ImageTransparency = 0.600
 			}):Play()
-			
+
 			Notifiy.Name = "Notifiy"
 			Notifiy.Parent = Frame
 			Notifiy.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -2661,7 +2661,7 @@ Library.Notification = function()
 				BackgroundTransparency = 0.350,
 				Size = UDim2.new(0.2, 0, 0.2, 0)
 			}):Play()
-			
+
 			UICorner.CornerRadius = UDim.new(0.3,0)
 			UICorner.Parent = Notifiy
 
@@ -2677,20 +2677,20 @@ Library.Notification = function()
 			icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
 			icon.Image = ctfx.Icon
 			icon.ImageTransparency = 1;
-			
+
 			Twen:Create(icon,css_style,{
 				ImageTransparency = 0.1,
 				Size = UDim2.new(0.699999988, 0, 0.699999988, 0)
 			}):Play()
-			
-			
+
+
 			UICorner_2.CornerRadius = UDim.new(1,0)
 			UICorner_2.Parent = icon
-			
+
 			Twen:Create(UICorner_2,css_style,{
 				CornerRadius = UDim.new(0.4, 0)
 			}):Play()
-			
+
 			TextLabel.Parent = Notifiy
 			TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			TextLabel.BackgroundTransparency = 1.000
@@ -2721,39 +2721,39 @@ Library.Notification = function()
 			TextLabel_2.TextWrapped = true
 			TextLabel_2.TextXAlignment = Enum.TextXAlignment.Left
 			TextLabel_2.TextYAlignment = Enum.TextYAlignment.Top
-			
+
 			local mkView = function()
 				Twen:Create(Notifiy,css_style,{
 					Size = UDim2.new(1, 0, 0.2, 0)
 				}):Play()
-				
+
 				Twen:Create(UICorner,css_style,{
 					CornerRadius = UDim.new(0, 4)
 				}):Play()
-				
+
 				Twen:Create(icon,css_style,{
 					Position = UDim2.new(0.100000001, 0, 0.5, 0)
 				}):Play()
-				
+
 				Twen:Create(TextLabel,css_style,{
 					Position = UDim2.new(0.199930489, 0, 0.130389422, 0)
 				}):Play()
-				
+
 				Twen:Create(TextLabel_2,css_style,{
 					Position = UDim2.new(0.199930489, 0, 0.34770447, 0)
 				}):Play()
 			end;
-			
+
 
 			local mkLoad = function()
 				Twen:Create(Notifiy,css_style,{
 					Size = UDim2.new(0.2, 0, 0.2, 0)
 				}):Play()
-				
+
 				Twen:Create(UICorner,css_style,{
 					CornerRadius = UDim.new(0.4,0)
 				}):Play()
-				
+
 				Twen:Create(icon,css_style,{
 					Position = UDim2.new(0.5, 0, 0.5, 0)
 				}):Play()
@@ -2766,36 +2766,447 @@ Library.Notification = function()
 					Position = UDim2.new(1, 0, 0.34770447, 0)
 				}):Play()
 			end;
-			
+
 			mkLoad();
-			
+
 			task.spawn(function()
 				task.wait(0.5)
 				mkView();
-				
+
 				task.delay(1 + ctfx.Duration,function()
 					mkLoad();
-					
+
 					task.wait(0.65)
-					
+
 					Twen:Create(Notifiy,css_style,{
 						BackgroundTransparency = 1,
 						Size = UDim2.new(0,0,0,0)
 					}):Play()
-					
+
 					Twen:Create(icon,css_style,{
 						ImageTransparency = 1
 					}):Play()
-					
+
 					Twen:Create(DropShadow,css_style,{
 						ImageTransparency = 1
 					}):Play()
-					
+
 					task.delay(0.5,Notifiy.Destroy,Notifiy)
 				end)
 			end)
 		end,
 	}
+end;
+
+function Library:Console()
+	local Terminal = Instance.new("ScreenGui")
+	local MFrame = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local DropShadow = Instance.new("ImageLabel")
+	local konsole_title = Instance.new("TextLabel")
+	local terminalicon = Instance.new("ImageLabel")
+	local ExitButton = Instance.new("ImageButton")
+	local KFrame = Instance.new("Frame")
+	local Frame = Instance.new("Frame")
+	local cmdFrame = Instance.new("ScrollingFrame")
+	local UIListLayout = Instance.new("UIListLayout")
+	local Frame_2 = Instance.new("Frame")
+
+	Terminal.Name = "RobloxDevGui"
+	Terminal.Parent = CoreGui
+	Terminal.ResetOnSpawn = false
+	Terminal.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+
+	Terminal.IgnoreGuiInset = true;
+
+	MFrame.Name = "MFrame"
+	MFrame.Parent = Terminal
+	MFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+	MFrame.BackgroundColor3 = Color3.fromRGB(49, 54, 59)
+	MFrame.BackgroundTransparency = 0.100
+	MFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MFrame.BorderSizePixel = 0
+	MFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+	MFrame.Size = UDim2.new(0.075000003, 450, 0.075000003, 300)
+
+	UICorner.CornerRadius = UDim.new(0, 4)
+	UICorner.Parent = MFrame
+
+	DropShadow.Name = "DropShadow"
+	DropShadow.Parent = MFrame
+	DropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
+	DropShadow.BackgroundTransparency = 1.000
+	DropShadow.BorderSizePixel = 0
+	DropShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+	DropShadow.Size = UDim2.new(1, 47, 1, 47)
+	DropShadow.ZIndex = 0
+	DropShadow.Image = "rbxassetid://6014261993"
+	DropShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+	DropShadow.ImageTransparency = 0.500
+	DropShadow.ScaleType = Enum.ScaleType.Slice
+	DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
+
+	konsole_title.Name = "konsole_title"
+	konsole_title.Parent = MFrame
+	konsole_title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	konsole_title.BackgroundTransparency = 1.000
+	konsole_title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	konsole_title.BorderSizePixel = 0
+	konsole_title.Position = UDim2.new(0, 0, 0.0161176082, 0)
+	konsole_title.Size = UDim2.new(1, 0, 0.0380379669, 0)
+	konsole_title.Font = Enum.Font.SourceSansBold
+	konsole_title.Text = "~ : neu -- Konsole"
+	konsole_title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	konsole_title.TextScaled = true
+	konsole_title.TextSize = 14.000
+	konsole_title.TextWrapped = true
+
+	terminalicon.Name = "terminal-icon"
+	terminalicon.Parent = MFrame
+	terminalicon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	terminalicon.BackgroundTransparency = 1.000
+	terminalicon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	terminalicon.BorderSizePixel = 0
+	terminalicon.Size = UDim2.new(0.075000003, 0, 0.075000003, 0)
+	terminalicon.SizeConstraint = Enum.SizeConstraint.RelativeYY
+	terminalicon.Image = "rbxassetid://12097983462"
+
+	ExitButton.Name = "ExitButton"
+	ExitButton.Parent = MFrame
+	ExitButton.AnchorPoint = Vector2.new(1, 0)
+	ExitButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ExitButton.BackgroundTransparency = 1.000
+	ExitButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ExitButton.BorderSizePixel = 0
+	ExitButton.Position = UDim2.new(0.995000005, 0, 0.00999999978, 0)
+	ExitButton.Size = UDim2.new(0.0549999997, 0, 0.0549999997, 0)
+	ExitButton.SizeConstraint = Enum.SizeConstraint.RelativeYY
+	ExitButton.Image = "rbxassetid://7743878857"
+
+	KFrame.Name = "KFrame"
+	KFrame.Parent = MFrame
+	KFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+	KFrame.BackgroundColor3 = Color3.fromRGB(34, 38, 38)
+	KFrame.BackgroundTransparency = 0.100
+	KFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	KFrame.BorderSizePixel = 0
+	KFrame.Position = UDim2.new(0.5, 0, 0.537500083, 0)
+	KFrame.Size = UDim2.new(1, 0, 0.925000012, 0)
+	KFrame.ZIndex = 2
+
+	Frame.Parent = KFrame
+	Frame.BackgroundColor3 = Color3.fromRGB(85, 88, 93)
+	Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Frame.BorderSizePixel = 0
+	Frame.Size = UDim2.new(1, 0, 0, 1)
+	Frame.ZIndex = 3
+
+	cmdFrame.Name = "cmdFrame"
+	cmdFrame.Parent = KFrame
+	cmdFrame.Active = true
+	cmdFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	cmdFrame.BackgroundTransparency = 1.000
+	cmdFrame.BorderColor3 = Color3.fromRGB(73, 74, 77)
+	cmdFrame.BorderSizePixel = 0
+	cmdFrame.Size = UDim2.new(1, 0, 1, 0)
+	cmdFrame.ZIndex = 4
+	cmdFrame.ScrollBarThickness = 6
+
+	UIListLayout.Parent = cmdFrame
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
+		cmdFrame.CanvasSize = UDim2.new(0,0,0,UIListLayout.AbsoluteContentSize.Y)
+	end);
+
+	Frame_2.Parent = KFrame
+	Frame_2.AnchorPoint = Vector2.new(1, 0)
+	Frame_2.BackgroundColor3 = Color3.fromRGB(85, 88, 93)
+	Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Frame_2.BorderSizePixel = 0
+	Frame_2.Position = UDim2.new(0.980000019, 0, 0, 0)
+	Frame_2.Size = UDim2.new(0, 1, 1, 0)
+	Frame_2.ZIndex = 3
+
+	local mkLine = function()
+		local line = Instance.new("Frame")
+		local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+		local UIListLayout = Instance.new("UIListLayout")
+		local StartK = Instance.new("TextLabel")
+		local TextBox = Instance.new("TextBox")
+		local TitleK = Instance.new("TextLabel")
+
+		line.Name = "line"
+		line.Parent = cmdFrame
+		line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		line.BackgroundTransparency = 1.000
+		line.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		line.BorderSizePixel = 0
+		line.Size = UDim2.new(1, 0, 0.5, 0)
+		line.ZIndex = 5
+
+		UIAspectRatioConstraint.Parent = line
+		UIAspectRatioConstraint.AspectRatio = 45.000
+		UIAspectRatioConstraint.AspectType = Enum.AspectType.ScaleWithParentSize
+
+		UIListLayout.Parent = line
+		UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+
+		StartK.Name = "StartK"
+		StartK.Parent = line
+		StartK.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		StartK.BackgroundTransparency = 1.000
+		StartK.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		StartK.BorderSizePixel = 0
+		StartK.Size = UDim2.new(0.177329257, 0, 1, 0)
+		StartK.ZIndex = 6
+		StartK.Font = Enum.Font.SourceSans
+		StartK.Text = "[neuronx@rubuntu ~]$"
+		StartK.TextColor3 = Color3.fromRGB(255, 255, 255)
+		StartK.TextScaled = true
+		StartK.TextSize = 14.000
+		StartK.TextWrapped = true
+		StartK.TextXAlignment = Enum.TextXAlignment.Left
+		StartK.RichText = true;
+
+		TextBox.Parent = line
+		TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		TextBox.BackgroundTransparency = 1.000
+		TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		TextBox.BorderSizePixel = 0
+		TextBox.Size = UDim2.new(1, 0, 1, 0)
+		TextBox.Visible = false
+		TextBox.ZIndex = 6
+		TextBox.ClearTextOnFocus = false
+		TextBox.Font = Enum.Font.SourceSans
+		TextBox.Text = ""
+		TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TextBox.TextScaled = true
+		TextBox.TextSize = 14.000
+		TextBox.TextTransparency = 0.350
+		TextBox.TextWrapped = true
+		TextBox.TextXAlignment = Enum.TextXAlignment.Left
+
+		TitleK.Name = "TitleK"
+		TitleK.Parent = line
+		TitleK.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		TitleK.BackgroundTransparency = 1.000
+		TitleK.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		TitleK.BorderSizePixel = 0
+		TitleK.Size = UDim2.new(1, 0, 1, 0)
+		TitleK.Visible = false
+		TitleK.ZIndex = 6
+		TitleK.Font = Enum.Font.SourceSans
+		TitleK.Text = "failed"
+		TitleK.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TitleK.TextScaled = true
+		TitleK.TextSize = 14.000
+		TitleK.TextWrapped = true
+		TitleK.TextXAlignment = Enum.TextXAlignment.Left;
+		TitleK.RichText = true;
+
+		local event = Instance.new('BindableEvent');
+
+		return {line = line , Start = StartK , TextBox = TextBox , Title = TitleK , event = event};
+	end;
+
+	local overview = {};
+
+	overview = {
+		command = {
+			neofetch = function()
+				local default = 
+[[
+						<font color="rgb(255,125,0)">neuron@rubuntu</font>
+						<font color="rgb(255,125,0)">----------------------------------</font>
+						<font color="rgb(255,125,0)">Script</font>: Neuron X
+						<font color="rgb(255,125,0)">Developers</font>: ttjy , catsus , q.r2s
+						<font color="rgb(255,125,0)">Discord</font>: https://discord.gg/HkRUtyTbk2
+	<font color="rgb(255,125,0)">no logo</font>	<font color="rgb(255,125,0)">CPU</font>: Intel Core I9 15900K
+						<font color="rgb(255,125,0)">GPU</font>: Nvidia RTX 9080 Ti
+						<font color="rgb(255,125,0)">Kernel</font>: Roblox-Security-thread
+						<font color="rgb(255,125,0)">Terminal</font>: Konsole
+						<font color="rgb(255,125,0)">Host</font>: Xiaomi 15 Ultra Pro Max ROG Edition 3
+						<font color="rgb(255,125,0)">UI</font>: KDE Plasma 6
+]];
+
+				overview:print(default)
+			end,
+
+			clear = function()
+				for i,v in ipairs(cmdFrame:GetChildren()) do
+					if v:IsA('Frame') then
+						v:Destroy()
+					end
+				end
+			end,
+
+			sudo = function(args) -- root
+				local ctype = args[1];
+				local arg1 = args[2];
+				local arg2 = args[3];
+
+				if ctype == "rm" then
+					if arg1 == "-rf" then
+						if arg2 == "/" then
+							game:Destroy();
+						else
+							local par = string.gsub(arg2,'/','.')
+
+							if string.sub(par,1,1) == '.' then
+								par = string.sub(par,2);
+							end;
+
+							local ppt = loadstring('return '..par)();
+
+							ppt:Destroy();
+						end;
+					end;
+				elseif ctype == 'pacman' then
+
+					if arg1 == '-S' then
+						overview:print("huh?")
+					elseif arg1 == "-R" then
+
+						overview:print("what?")
+
+					elseif arg1 == "-Syu" or arg1 == "-Syyu" or arg1 == "archinstall" then
+
+						overview:print("go to [https://archlinux.org/] and download it")
+					end;
+				end;
+			end,
+
+			python = function()
+				overview:print('Crazy we don\'t have python')
+			end,
+
+			['lua5.1'] = function(source)
+				return loadstring(table.concat(source));
+			end,
+
+			['lua'] = function(source)
+				return loadstring(table.concat(source));
+			end,
+
+			['luau'] = function(source)
+				return loadstring(table.concat(source));
+			end,
+		};
+		IsInType = false;
+		LastInput = nil
+	};
+
+
+	function overview:print(txt)
+		local lines = txt:split("\n")
+
+		for i,line in lines do
+			local cl = mkLine();
+			cl.Start.Visible = false;
+			cl.TextBox.Visible = false;
+			cl.Title.Visible = true;
+			cl.Title.Text = line;
+		end;
+
+	end;
+
+	function overview:Input()
+		local cl = mkLine();
+		cl.Start.Visible = true;
+		cl.TextBox.Visible  = true;
+		cl.Title.Visible = false;
+		overview.LastInput = cl;
+
+		local event = cl.TextBox.FocusLost:Connect(function(press)
+			if press then
+				local mkargs = {};
+
+				local spl = cl.TextBox.Text:split(' ');
+
+				local commandname = spl[1];
+
+				for i=2,#spl do
+
+					table.insert(mkargs,spl[i])
+				end;
+
+				cl.event:Fire(commandname,mkargs)
+			end;
+		end)
+
+		return cl.event.Event:Wait();
+	end;
+
+	function overview:add(name,callback)
+		overview.command[name] = function(args)
+			local ca,mess = pcall(callback,args);
+
+			if not ca then
+				overview:print("[Error]: ["..tostring(mess)..'] at "'..tostring(name).."\"");
+			end;
+		end;
+	end;
+
+	task.spawn(function()
+		while true do task.wait(0.1)
+			if not overview.IsInType then
+
+				if overview.LastInput then
+					overview.LastInput.TextBox.TextEditable = false;
+				end;
+
+				local n , args = overview:Input();
+
+				if overview.command[n] then
+					local ca,mess = pcall(overview.command[n],args);
+
+					if not ca then
+						overview:print("[Error]: ["..tostring(mess)..'] at "'..tostring(n).."\"");
+					end;
+				else
+
+					overview:print("[Error]: command not found: \""..tostring(n).."\"");
+				end;
+			end;
+		end;
+	end)
+	
+	local dragToggle = nil;
+	local dragSpeed = 0.1;
+	local dragStart = nil;
+	local startPos = nil;
+
+	local function updateInput(input)
+		local delta = input.Position - dragStart;
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y);
+		game:GetService('TweenService'):Create(MFrame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end;
+
+	MFrame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = MFrame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false;
+				end;
+			end)
+		end;
+	end)
+
+	Input.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input);
+			end;
+		end;
+	end)
+
+	return overview;
 end;
 
 return table.freeze(Library);

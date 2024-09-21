@@ -2216,6 +2216,12 @@ function Library.new(config)
 					Close = function(value)
 						WindowTable.Dropdown:Close();
 					end,
+					Clear = function()
+						drop.Data = {}
+					end,
+					Set = function(table)
+						drop.Data = table
+					end
 				};
 			end;
 

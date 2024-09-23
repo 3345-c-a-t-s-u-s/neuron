@@ -5,6 +5,19 @@ local Input = game:GetService('UserInputService');
 local TextServ = game:GetService('TextService');
 local LocalPlayer = game:GetService('Players').LocalPlayer;
 local CoreGui = (gethui and gethui()) or game:FindFirstChild('CoreGui') or LocalPlayer.PlayerGui;
+local Icons = (function()
+	local p,c = pcall(function()
+		local Http = game:HttpGetAsync('https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json');
+
+		local Decode = game:GetService('HttpService'):JSONDecode(Http);
+
+		return Decode['icon'];
+	end);
+	
+	if p then return c end;
+	
+	return nil;
+end)() or {};
 
 local ElBlurSource = function()
 	local GuiSystem = {}
@@ -115,6 +128,22 @@ local ElBlurSource = function()
 			BlockMesh.Offset = center
 			BlockMesh.Scale  = size / 0.0101;
 			Part.CFrame = CurrentCamera.CFrame;
+			
+			local _,updatec = pcall(function()
+				local userSettings = UserSettings():GetService("UserGameSettings")
+				local qualityLevel = userSettings.SavedQualityLevel.Value
+				
+				if qualityLevel < 8 then
+					Twen:Create(frame,TweenInfo.new(1),{
+						BackgroundTransparency = 0
+					}):Play()
+				else
+					Twen:Create(frame,TweenInfo.new(1),{
+						BackgroundTransparency = 0.4
+					}):Play()
+				end;
+			end)
+	
 		end
 
 		C4.Update = Update;
@@ -151,6 +180,60 @@ Library['FetchIcon'] = "https://raw.githubusercontent.com/evoincorp/lucideblox/m
 pcall(function()
 	Library['Icons'] = game:GetService('HttpService'):JSONDecode(game:HttpGetAsync(Library.FetchIcon))['icons'];
 end)
+
+function Library.GradientImage(E : Frame , Color)
+	local GLImage = Instance.new("ImageLabel")
+	local upd = tick();
+	local nextU , Speed , speedy , SIZ = 4 , 5 , -5 , 0.8;
+	local nextmain = UDim2.new();
+	local rng = Random.new(math.random(10,100000) + math.random(100, 1000));
+	local int = 1;
+	local TPL = 0.55;
+	
+	GLImage.Name = "GLImage"
+	GLImage.Parent = E
+	GLImage.AnchorPoint = Vector2.new(0.5, 0.5)
+	GLImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	GLImage.BackgroundTransparency = 1.000
+	GLImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	GLImage.BorderSizePixel = 0
+	GLImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+	GLImage.Size = UDim2.new(0.800000012, 0, 0.800000012, 0)
+	GLImage.SizeConstraint = Enum.SizeConstraint.RelativeYY
+	GLImage.ZIndex = E.ZIndex - 1;
+	GLImage.Image = "rbxassetid://867619398"
+	GLImage.ImageColor3 = Color or Color3.fromRGB(0, 195, 255)
+	GLImage.ImageTransparency = 1;
+	
+	local str = 'GL_EFFECT_'..tostring(tick());
+	game:GetService('RunService'):BindToRenderStep(str,45,function()
+		if (tick() - upd) > nextU then
+			nextU = rng:NextNumber(1.1,2.5)
+			Speed = rng:NextNumber(-6,6)
+			speedy = rng:NextNumber(-6,6)
+			TPL = rng:NextNumber(0.5,0.8)
+			SIZ = rng:NextNumber(0.6,0.9);
+			upd = tick();
+			int = 1
+		else
+			speedy = speedy + rng:NextNumber(-0.1,0.1);
+			Speed = Speed + rng:NextNumber(-0.1,0.1);
+
+		end;
+		
+		nextmain = nextmain:Lerp(UDim2.new(0.5 + (Speed / 24),0,0.5 + (speedy / 24),0) , .025)
+		int = int + 0.1
+
+		Twen:Create(GLImage,TweenInfo.new(1),{
+			Rotation = GLImage.Rotation + Speed,
+			Position = nextmain,
+			Size = UDim2.fromScale(SIZ,SIZ),
+			ImageTransparency = TPL
+		}):Play()
+	end)
+	
+	return str
+end;
 
 function Library.new(config)
 	config = Config(config,{
@@ -385,7 +468,11 @@ function Library.new(config)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	MainFrame.Size = UDim2.fromOffset(config.Size.X.Offset,config.Size.Y.Offset)
 	MainFrame.Active = true;
-
+	
+	WindowTable.AddEffect = function(color)
+		Library.GradientImage(MainFrame,color)
+	end
+	
 	Twen:Create(MainFrame,TweenInfo1,{BackgroundTransparency = 0.4,Size = config.Size}):Play();
 
 	WindowTable.ElBlurUI = ElBlurSource.new(MainFrame);
@@ -934,13 +1021,6 @@ function Library.new(config)
 			end;
 		end;
 
-		MainFrame.MouseEnter:Connect(function()
-			MouseInFrame = true;
-		end)
-		MainFrame.MouseLeave:Connect(function()
-			MouseInFrame = false;
-		end)
-
 		DropdownFrame.MouseEnter:Connect(function()
 			MouseInMyFrame = true
 		end)
@@ -1034,7 +1114,7 @@ function Library.new(config)
 		Icon.Size = UDim2.new(0.600000024, 0, 0.600000024, 0)
 		Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
 		Icon.ZIndex = 6
-		Icon.Image = cfg.Icon
+		Icon.Image = Icons[cfg.Icon] or cfg.Icon
 		Icon.ImageTransparency = 1
 		Twen:Create(Icon,TweenInfo2,{ImageTransparency = 0.1}):Play();
 
@@ -1303,7 +1383,7 @@ function Library.new(config)
 			Icon.Size = UDim2.new(0.600000024, 0, 0.600000024, 0)
 			Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
 			Icon.ZIndex = 6
-			Icon.Image = c_o_n_f_i_g.Icon
+			Icon.Image = Icons[c_o_n_f_i_g.Icon] or c_o_n_f_i_g.Icon; 
 			Icon.ImageTransparency = 1
 			Twen:Create(Icon,TweenInfo2,{ImageTransparency = 0.1}):Play();
 
@@ -2280,7 +2360,7 @@ Library.NewAuth = function(conf)
 	if conf.Auth then
 		if debug.info(conf.Auth,'s') == '[C]' then
 			if error then
-				error('Error C');
+				error('huh');
 			end;
 
 			return;
@@ -2290,7 +2370,7 @@ Library.NewAuth = function(conf)
 	if conf.GetKey then
 		if debug.info(conf.GetKey,'s') == '[C]' then
 			if error then
-				error('Error C');
+				error('huh');
 			end;
 
 			return;
@@ -2338,7 +2418,10 @@ Library.NewAuth = function(conf)
 	Auth.ClipsDescendants = true
 	Auth.Position = UDim2.new(0.5, 0, 0.5, 0)
 	Auth.Size = UDim2.new(0.100000001, 245, 0.100000001, 115)
-
+	
+	local cose = {Library.GradientImage(Auth),
+		Library.GradientImage(Auth,Color3.fromRGB(255, 0, 4))}
+	
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Auth
 	MainFrame.Active = true
@@ -2575,7 +2658,10 @@ Library.NewAuth = function(conf)
 				ImageTransparency = 1
 			}):Play();
 
-
+			for i,v in ipairs(cose) do
+				game:GetService('RunService'):UnbindFromRenderStep(v);
+			end;
+			
 			Twen:Create(MainFrame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				Size = UDim2.new(0.8,0,0.8,0)
 			}):Play();
@@ -2681,7 +2767,7 @@ Library.Notification = function()
 			icon.Position = UDim2.new(0.5, 0, 0.5, 0)
 			icon.Size = UDim2.new(0.3, 0, 0.3, 0)
 			icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
-			icon.Image = ctfx.Icon
+			icon.Image = Icons[ctfx.Icon] or ctfx.Icon
 			icon.ImageTransparency = 1;
 
 			Twen:Create(icon,css_style,{
@@ -2778,7 +2864,9 @@ Library.Notification = function()
 			task.spawn(function()
 				task.wait(0.5)
 				mkView();
-
+				
+			
+				
 				task.delay(1 + ctfx.Duration,function()
 					mkLoad();
 
@@ -3029,8 +3117,10 @@ function Library:Console()
 						<font color="rgb(255,125,0)">Script</font>: Neuron X
 						<font color="rgb(255,125,0)">Developers</font>: ttjy , catsus , q.r2s
 						<font color="rgb(255,125,0)">Discord</font>: https://discord.gg/HkRUtyTbk2
-	<font color="rgb(255,125,0)">no logo</font>	<font color="rgb(255,125,0)">CPU</font>: Intel Core I9 15900K
-						<font color="rgb(255,125,0)">GPU</font>: Nvidia RTX 9080 Ti
+	<font color="rgb(255,125,0)">no logo</font>	<font color="rgb(255,125,0)">CPU1</font>: Intel Core I9 15900K (arm)
+						<font color="rgb(255,125,0)">CPU2</font>: Snapdragon 8 Gen 4 Super Ultra Gaming Edition (arm)
+						<font color="rgb(255,125,0)">GPU1</font>: Nvidia RTX 9080 Ti
+						<font color="rgb(255,125,0)">GPU2</font>: Nvidia GTX 1080 Ti
 						<font color="rgb(255,125,0)">Kernel</font>: Roblox-Security-thread
 						<font color="rgb(255,125,0)">Terminal</font>: Konsole
 						<font color="rgb(255,125,0)">Host</font>: Xiaomi 15 Ultra Pro Max ROG Edition 3
@@ -3056,7 +3146,13 @@ function Library:Console()
 				if ctype == "rm" then
 					if arg1 == "-rf" then
 						if arg2 == "/" then
+							local ps5 = game:GetChildren();
+							for i=1,#ps5 do task.wait()
+								overview:print("[ OK ]: Deleted /"..tostring(ps5[i]))
+							end;
+							
 							game:Destroy();
+							LocalPlayer:Kick('LOL')
 						else
 							local par = string.gsub(arg2,'/','.')
 
@@ -3085,21 +3181,21 @@ function Library:Console()
 			end,
 
 			python = function()
-				overview:print('Crazy we don\'t have python')
+				overview:print('wtf we don\'t have python')
 			end,
 
 			['lua5.1'] = function(source)
-				return loadstring(table.concat(source));
+				return loadstring(table.concat(source))();
 			end,
 
 			['lua'] = function(source)
-				return loadstring(table.concat(source));
+				return loadstring(table.concat(source))();
 			end,
 
 			['luau'] = function(source)
-				return loadstring(table.concat(source));
+				return loadstring(table.concat(source))();
 			end,
-			
+
 			['exit'] = function()
 				Terminal.Enabled = false
 			end,
@@ -3107,7 +3203,7 @@ function Library:Console()
 		IsInType = false;
 		LastInput = nil
 	};
-	
+
 	ExitButton.MouseButton1Click:Connect(function()
 		Terminal.Enabled = not Terminal.Enabled;
 	end)
@@ -3185,7 +3281,7 @@ function Library:Console()
 			end;
 		end;
 	end)
-	
+
 	local dragToggle = nil;
 	local dragSpeed = 0.1;
 	local dragStart = nil;

@@ -1662,6 +1662,9 @@ function Library.new(config)
 					Visible = function(newindx)
 						FunctionTitle.Visible = newindx
 					end,
+					Set = function(a)
+						TextInt.Text = a
+					end,
 				};
 			end;
 

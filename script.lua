@@ -42,7 +42,7 @@ local ElBlurSource = function()
 		return rayOrigin + (a * rayDirection), a;
 	end;
 
-	function GuiSystem.new(frame)
+	function GuiSystem.new(frame,NoAutoBackground)
 		local Part = Instance.new('Part',workspace);
 		local DepthOfField = Instance.new('DepthOfFieldEffect',game:GetService('Lighting'));
 		local SurfaceGui = Instance.new('SurfaceGui',Part);
@@ -128,22 +128,25 @@ local ElBlurSource = function()
 			BlockMesh.Offset = center
 			BlockMesh.Scale  = size / 0.0101;
 			Part.CFrame = CurrentCamera.CFrame;
+			
+			if not NoAutoBackground then
+				
+				local _,updatec = pcall(function()
+					local userSettings = UserSettings():GetService("UserGameSettings")
+					local qualityLevel = userSettings.SavedQualityLevel.Value
 
-			local _,updatec = pcall(function()
-				local userSettings = UserSettings():GetService("UserGameSettings")
-				local qualityLevel = userSettings.SavedQualityLevel.Value
+					if qualityLevel < 8 then
+						Twen:Create(frame,TweenInfo.new(1),{
+							BackgroundTransparency = 0
+						}):Play()
+					else
+						Twen:Create(frame,TweenInfo.new(1),{
+							BackgroundTransparency = 0.4
+						}):Play()
+					end;
+				end)
 
-				if qualityLevel < 8 then
-					Twen:Create(frame,TweenInfo.new(1),{
-						BackgroundTransparency = 0
-					}):Play()
-				else
-					Twen:Create(frame,TweenInfo.new(1),{
-						BackgroundTransparency = 0.4
-					}):Play()
-				end;
-			end)
-
+			end
 		end
 
 		C4.Update = Update;
@@ -154,7 +157,22 @@ local ElBlurSource = function()
 				Part.CFrame = CurrentCamera.CFrame;
 			end);
 		end)
-
+		
+		C4.Destroy = function()
+			C4.Signal:Disconnect();
+			C4.Signal2:Disconnect();
+			C4.Update = function()
+				
+			end;
+			
+			Twen:Create(Part,TweenInfo.new(1),{
+				Transparency = 1
+			}):Play();
+			
+			DepthOfField:Destroy();
+			Part:Destroy()
+		end;
+		
 		return C4;
 	end;
 
@@ -186,7 +204,7 @@ function Library.GradientImage(E : Frame , Color)
 	local upd = tick();
 	local nextU , Speed , speedy , SIZ = 4 , 5 , -5 , 0.8;
 	local nextmain = UDim2.new();
-	local rng = Random.new(math.random(10,100000) + math.random(100, 1000));
+	local rng = Random.new(math.random(10,100000) + math.random(100, 1000) + math.sqrt(tick()));
 	local int = 1;
 	local TPL = 0.55;
 
@@ -211,7 +229,7 @@ function Library.GradientImage(E : Frame , Color)
 			nextU = rng:NextNumber(1.1,2.5)
 			Speed = rng:NextNumber(-6,6)
 			speedy = rng:NextNumber(-6,6)
-			TPL = rng:NextNumber(0.5,0.8)
+			TPL = rng:NextNumber(0.2,0.8)
 			SIZ = rng:NextNumber(0.6,0.9);
 			upd = tick();
 			int = 1
@@ -2307,7 +2325,7 @@ function Library.new(config)
 					end
 				};
 			end;
-			
+
 			function SectionTable:NewTextbox(conf)
 				conf = Config(conf,{
 					Title = "Textbox",
@@ -2449,8 +2467,8 @@ function Library.new(config)
 				Button.TextColor3 = Color3.fromRGB(0, 0, 0)
 				Button.TextSize = 14.000
 				Button.TextTransparency = 1.000
-				
-				
+
+
 				TextBox.FocusLost:Connect(function(press)
 					conf.Callback(TextBox.Text);
 				end)
@@ -2569,9 +2587,10 @@ Library.NewAuth = function(conf)
 	Auth.ClipsDescendants = true
 	Auth.Position = UDim2.new(0.5, 0, 0.5, 0)
 	Auth.Size = UDim2.new(0.100000001, 245, 0.100000001, 115)
-
-	local cose = {Library.GradientImage(Auth),
-		Library.GradientImage(Auth,Color3.fromRGB(255, 0, 4))}
+	
+	local BlueEffect = ElBlurSource.new(MainFrame,true);
+	local cose = {Library.GradientImage(MainFrame),
+		Library.GradientImage(MainFrame,Color3.fromRGB(255, 0, 4))}
 
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Auth
@@ -2808,7 +2827,10 @@ Library.NewAuth = function(conf)
 			Twen:Create(MainDropShadow,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				ImageTransparency = 1
 			}):Play();
+			
+			BlueEffect.Destroy();
 
+			
 			for i,v in ipairs(cose) do
 				game:GetService('RunService'):UnbindFromRenderStep(v);
 			end;
@@ -2824,7 +2846,9 @@ Library.NewAuth = function(conf)
 				}):Play();
 
 				task.delay(1.2,function()
+					
 					ScreenGui:Destroy()
+					
 				end)
 			end)
 		end,

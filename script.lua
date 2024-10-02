@@ -128,9 +128,9 @@ local ElBlurSource = function()
 			BlockMesh.Offset = center
 			BlockMesh.Scale  = size / 0.0101;
 			Part.CFrame = CurrentCamera.CFrame;
-			
+
 			if not NoAutoBackground then
-				
+
 				local _,updatec = pcall(function()
 					local userSettings = UserSettings():GetService("UserGameSettings")
 					local qualityLevel = userSettings.SavedQualityLevel.Value
@@ -157,22 +157,22 @@ local ElBlurSource = function()
 				Part.CFrame = CurrentCamera.CFrame;
 			end);
 		end)
-		
+
 		C4.Destroy = function()
 			C4.Signal:Disconnect();
 			C4.Signal2:Disconnect();
 			C4.Update = function()
-				
+
 			end;
-			
+
 			Twen:Create(Part,TweenInfo.new(1),{
 				Transparency = 1
 			}):Play();
-			
+
 			DepthOfField:Destroy();
 			Part:Destroy()
 		end;
-		
+
 		return C4;
 	end;
 
@@ -299,146 +299,7 @@ function Library.new(config)
 	WindowTable.WindowToggle = true;
 	WindowTable.Keybind = config.Keybind;
 	WindowTable.ToggleButton = nil
-
-	local function Update()
-		if WindowTable.WindowToggle then
-			Twen:Create(MainFrame,TweenInfo1,{BackgroundTransparency = 0.4,Size = config.Size}):Play();
-			Twen:Create(MainDropShadow,TweenInfo1,{ImageTransparency = 0.6}):Play();
-			Twen:Create(Headers,TweenInfo1,{BackgroundTransparency = 0.5}):Play();
-			Twen:Create(Logo,TweenInfo1,{ImageTransparency = 0}):Play();
-			Twen:Create(MainFrame,TweenInfo.new(0.7,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{Position = UDim2.fromScale(0.5,0.5)}):Play();
-			WindowTable.ElBlurUI.Enabled = true;
-		else
-			Twen:Create(MainFrame,TweenInfo1,{BackgroundTransparency = 1,Size = UDim2.new(0.100000001, 0, 0.0500000007, 0)}):Play();
-			Twen:Create(MainFrame,TweenInfo2,{Position = UDim2.fromScale(0.5,-0)}):Play();
-			Twen:Create(MainDropShadow,TweenInfo1,{ImageTransparency = 1}):Play();
-			Twen:Create(Headers,TweenInfo1,{BackgroundTransparency = 1}):Play();
-			Twen:Create(Logo,TweenInfo1,{ImageTransparency = 1}):Play();
-
-			WindowTable.ElBlurUI.Enabled = false;
-
-			task.delay(0.6,function()
-				if not WindowTable.WindowToggle then
-					Twen:Create(MainFrame,TweenInfo2,{Position = UDim2.fromScale(0.5,-0.15)}):Play();
-				end;
-			end)
-		end;
-
-		WindowTable.Dropdown:Close()
-		if WindowTable.ToggleButton then
-			WindowTable.ToggleButton();
-		end;
-
-		task.delay(1,WindowTable.ElBlurUI.Update)
-	end;
-
-	task.spawn(function()
-		local Frame = Instance.new("Frame")
-		local UICorner = Instance.new("UICorner")
-		local DropShadow = Instance.new("ImageLabel")
-		local TextLabel = Instance.new("TextLabel")
-		local UIGradient = Instance.new("UIGradient")
-		local Button = Instance.new("TextButton")
-
-		Frame.Parent = ScreenGui
-		Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-		Frame.BackgroundColor3 = Color3.fromRGB(33, 33, 33)
-		Frame.BackgroundTransparency = 0.500
-		Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Frame.BorderSizePixel = 0
-		Frame.Position = UDim2.new(0.5, 0, -0.2, 0)
-		Frame.Size = UDim2.new(0.100000001, 0, 0.05500000007, 0)
-		Frame.ZIndex = 150
-
-		Twen:Create(Frame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-			Position = UDim2.new(0.5, 0, 0, 0)
-		}):Play()
-
-		UICorner.CornerRadius = UDim.new(0.5, 0)
-		UICorner.Parent = Frame
-
-		DropShadow.Name = "DropShadow"
-		DropShadow.Parent = Frame
-		DropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
-		DropShadow.BackgroundTransparency = 1.000
-		DropShadow.BorderSizePixel = 0
-		DropShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-		DropShadow.Size = UDim2.new(1, 37, 1, 37)
-		DropShadow.ZIndex = 150
-		DropShadow.Image = "rbxassetid://6014261993"
-		DropShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
-		DropShadow.ImageTransparency = 0.500
-		DropShadow.ScaleType = Enum.ScaleType.Slice
-		DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
-
-		Twen:Create(DropShadow,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-			ImageTransparency = 0.3
-		}):Play()
-
-		TextLabel.Parent = Frame
-		TextLabel.Active = true
-		TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.BackgroundTransparency = 1.000
-		TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		TextLabel.BorderSizePixel = 0
-		TextLabel.Position = UDim2.new(0.5, 0, 0.675000012, 0)
-		TextLabel.Size = UDim2.new(0.949999988, 0, 0.400000006, 0)
-		TextLabel.ZIndex = 150
-		TextLabel.Font = Enum.Font.GothamBold
-		TextLabel.Text = config.Title
-		TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.TextScaled = true
-		TextLabel.TextSize = 14.000
-		TextLabel.TextWrapped = true
-		TextLabel.TextTransparency = 0.1;
-
-		UIGradient.Rotation = 90
-		UIGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.00, 0.00), NumberSequenceKeypoint.new(0.75, 0.27), NumberSequenceKeypoint.new(1.00, 1.00)}
-		UIGradient.Parent = TextLabel
-
-		Button.Name = "Button"
-		Button.Parent = Frame
-		Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Button.BackgroundTransparency = 1.000
-		Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Button.BorderSizePixel = 0
-		Button.Size = UDim2.new(1, 0, 1, 0)
-		Button.ZIndex = 150
-		Button.Font = Enum.Font.SourceSans
-		Button.Text = ""
-		Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-		Button.TextSize = 14.000
-		Button.TextTransparency = 1.000
-
-		Button.MouseButton1Click:Connect(function()
-			WindowTable.WindowToggle = not WindowTable.WindowToggle
-			Update()
-		end)
-
-		WindowTable.ToggleButton = function(a)
-			if not WindowTable.WindowToggle then
-				Twen:Create(Frame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					Position = UDim2.new(0.5, 0, 0, 0)
-				}):Play()
-
-				Twen:Create(DropShadow,TweenInfo.new(1.5,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					ImageTransparency = 0.3
-				}):Play()
-			else
-				Twen:Create(Frame,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					Position = UDim2.new(0.5, 0, -0.2, 0)
-				}):Play()
-
-				Twen:Create(DropShadow,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					ImageTransparency = 0.6
-				}):Play()
-			end;
-		end;
-
-		WindowTable.ToggleButton()
-	end)
-
+	
 	local ImageButton = Instance.new("ImageButton")
 
 	ImageButton.Parent = MainFrame
@@ -453,6 +314,102 @@ function Library.new(config)
 	ImageButton.ZIndex = 50
 	ImageButton.Image = "rbxassetid://10002398990"
 	ImageButton.ImageTransparency = 1
+	
+	local HomeIcon = Instance.new("ImageLabel")
+	HomeIcon.Parent = ImageButton
+	HomeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+	HomeIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	HomeIcon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	HomeIcon.BorderSizePixel = 0
+	HomeIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+	HomeIcon.Size = UDim2.new(0.7,0,0.7,0)
+	HomeIcon.ZIndex = 49
+	HomeIcon.Image = "rbxassetid://7733993211"
+	HomeIcon.ScaleType = Enum.ScaleType.Fit
+	HomeIcon.ImageTransparency = 1;
+	HomeIcon.BackgroundTransparency = 1;
+	
+	local function Update()
+		if WindowTable.WindowToggle then
+			Twen:Create(MainFrame,TweenInfo.new(1.5,Enum.EasingStyle.Quint),{BackgroundTransparency = 0.4,Size = config.Size}):Play();
+			Twen:Create(MainDropShadow,TweenInfo1,{ImageTransparency = 0.6}):Play();
+			Twen:Create(Headers,TweenInfo1,{BackgroundTransparency = 0.5}):Play();
+			Twen:Create(Logo,TweenInfo1,{ImageTransparency = 0}):Play();
+			Twen:Create(MainFrame,TweenInfo.new(0.5,Enum.EasingStyle.Quint),{Position = UDim2.fromScale(0.5,0.5)}):Play();
+			WindowTable.ElBlurUI.Enabled = true;
+			
+			Twen:Create(BlockFrame1,TweenInfo1,{BackgroundTransparency = 0.8}):Play();
+			Twen:Create(BlockFrame2,TweenInfo1,{BackgroundTransparency = 0.8}):Play();
+			Twen:Create(BlockFrame3,TweenInfo1,{BackgroundTransparency = 0.8}):Play();
+			
+			Twen:Create(TabButtonFrame,TweenInfo1,{Position = UDim2.fromScale(0.16,0.215)}):Play();
+			Twen:Create(MainTabFrame,TweenInfo1,{Position = UDim2.fromScale(0.658,0.131)}):Play();
+			Twen:Create(Description,TweenInfo1,{Position = UDim2.fromScale(0.328,0.071)}):Play();
+
+			Twen:Create(Title,TweenInfo1,{Position = UDim2.fromScale(0.328,0.013)}):Play();
+			Twen:Create(Headers,TweenInfo1,{Position = UDim2.fromScale(0.01,0.015)}):Play();
+
+			Twen:Create(ImageButton,TweenInfo.new(0.85,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
+				Position = UDim2.new(0.992500007, 0, 0.00999999978, 0),
+				Size = UDim2.new(0.0850000009, 0, 0.0850000009, 0),
+				ImageTransparency = 0.5,
+				AnchorPoint = Vector2.new(1, 0)
+			}):Play();
+			
+			Twen:Create(HomeIcon,TweenInfo.new(0.5),{
+				ImageTransparency = 1,
+			}):Play()
+
+			ImageButton.Image = "rbxassetid://10002398990"
+			
+			Twen:Create(UICorner,TweenInfo.new(1),{
+				CornerRadius = UDim.new(0, 7)
+			}):Play()
+
+		else
+			Twen:Create(MainFrame,TweenInfo.new(1,Enum.EasingStyle.Quint),{BackgroundTransparency = 1,Size = UDim2.new(0.085, 10,0.05, 0)}):Play();
+			Twen:Create(MainFrame,TweenInfo.new(0.5,Enum.EasingStyle.Quint),{Position = UDim2.new(0.5, 0,0.05, 0)}):Play();
+			Twen:Create(MainDropShadow,TweenInfo1,{ImageTransparency = 1}):Play();
+			Twen:Create(Headers,TweenInfo1,{BackgroundTransparency = 1}):Play();
+			Twen:Create(Logo,TweenInfo1,{ImageTransparency = 1}):Play();
+			Twen:Create(TabButtonFrame,TweenInfo1,{Position = UDim2.fromScale(0.16,1.1)}):Play();
+			Twen:Create(MainTabFrame,TweenInfo1,{Position = UDim2.fromScale(1.5,0.131)}):Play();
+			Twen:Create(Description,TweenInfo1,{Position = UDim2.fromScale(1.5,0.071)}):Play();
+			Twen:Create(Headers,TweenInfo1,{Position = UDim2.fromScale(0.01,-0.2)}):Play();
+
+			Twen:Create(UICorner,TweenInfo.new(1),{
+				CornerRadius = UDim.new(0.1,0)
+			}):Play()
+			
+			Twen:Create(ImageButton,TweenInfo1,{
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				Size = UDim2.new(1,0,1,0),
+				ImageTransparency = 1,
+				AnchorPoint = Vector2.new(0.5,0.5)
+			}):Play();
+			
+			Twen:Create(HomeIcon,TweenInfo.new(1),{
+				ImageTransparency = 0.5,
+			}):Play()
+			
+			
+			Twen:Create(Title,TweenInfo1,{Position = UDim2.fromScale(1,0.071)}):Play();
+
+			
+			Twen:Create(BlockFrame1,TweenInfo1,{BackgroundTransparency = 1}):Play();
+			Twen:Create(BlockFrame2,TweenInfo1,{BackgroundTransparency = 1}):Play();
+			Twen:Create(BlockFrame3,TweenInfo1,{BackgroundTransparency = 1}):Play();
+
+			WindowTable.ElBlurUI.Enabled = false;
+		end;
+
+		WindowTable.Dropdown:Close()
+		if WindowTable.ToggleButton then
+			WindowTable.ToggleButton();
+		end;
+
+		task.delay(1,WindowTable.ElBlurUI.Update)
+	end;
 
 	Twen:Create(ImageButton,TweenInfo1,{
 		ImageTransparency = 0.5
@@ -486,7 +443,8 @@ function Library.new(config)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	MainFrame.Size = UDim2.fromOffset(config.Size.X.Offset,config.Size.Y.Offset)
 	MainFrame.Active = true;
-
+	MainFrame.ClipsDescendants = true;
+	
 	WindowTable.AddEffect = function(color)
 		Library.GradientImage(MainFrame,color)
 	end
@@ -511,6 +469,8 @@ function Library.new(config)
 	MainDropShadow.ImageTransparency = 1
 	MainDropShadow.ScaleType = Enum.ScaleType.Slice
 	MainDropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
+	MainDropShadow.Rotation = 0.0001;
+	
 	Twen:Create(MainDropShadow,TweenInfo2,{ImageTransparency = 0.6}):Play();
 
 	Headers.Name = "Headers"
@@ -2109,7 +2069,8 @@ function Library.new(config)
 
 				local function update(Input)
 					local SizeScale = math.clamp((((Input.Position.X) - MFrame.AbsolutePosition.X) / MFrame.AbsoluteSize.X), 0, 1)
-					local Value = math.floor(((slider.Max - slider.Min) * SizeScale) + slider.Min)
+					local Main = ((slider.Max - slider.Min) * SizeScale) + slider.Min;
+					local Value = math.round(Main)
 					local Size = UDim2.fromScale(SizeScale, 1)
 					ValueText.Text = tostring(Value)..'/'..tostring(slider.Max)
 					Twen:Create(TFrame,TweenInfo.new(0.1),{Size = Size}):Play()
@@ -2587,7 +2548,7 @@ Library.NewAuth = function(conf)
 	Auth.ClipsDescendants = true
 	Auth.Position = UDim2.new(0.5, 0, 0.5, 0)
 	Auth.Size = UDim2.new(0.100000001, 245, 0.100000001, 115)
-	
+
 	local BlueEffect = ElBlurSource.new(MainFrame,true);
 	local cose = {Library.GradientImage(MainFrame),
 		Library.GradientImage(MainFrame,Color3.fromRGB(255, 0, 4))}
@@ -2827,10 +2788,10 @@ Library.NewAuth = function(conf)
 			Twen:Create(MainDropShadow,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				ImageTransparency = 1
 			}):Play();
-			
+
 			BlueEffect.Destroy();
 
-			
+
 			for i,v in ipairs(cose) do
 				game:GetService('RunService'):UnbindFromRenderStep(v);
 			end;
@@ -2846,9 +2807,9 @@ Library.NewAuth = function(conf)
 				}):Play();
 
 				task.delay(1.2,function()
-					
+
 					ScreenGui:Destroy()
-					
+
 				end)
 			end)
 		end,
@@ -3492,5 +3453,7 @@ function Library:Console()
 
 	return overview;
 end;
+
+print('[ OK ]: Fetch Nothing Library')
 
 return table.freeze(Library);

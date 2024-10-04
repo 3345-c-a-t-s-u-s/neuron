@@ -1,12 +1,5 @@
---[[
-    Fluent Interface Suite
-    This script is not intended to be modified.
-    To view the source code, see the 'src' folder on GitHub!
-
-    Author: dawid
-    License: MIT
-    GitHub: https://github.com/dawid-scripts/Fluent
---]]
+-- Fluent Mod
+local old_tts = tostring;
 local a, b = {
 	{
 		1,
@@ -2167,7 +2160,11 @@ local aa = {
 			end
 			for s, t in next, n or {} do
 				if s ~= "ThemeTag" then
-					p[s] = t
+					if s == 'Text' then
+						p[s] = tostring(t)
+					else
+						p[s] = t
+					end
 				end
 			end
 			for u, v in next, o or {} do
@@ -2932,7 +2929,7 @@ local aa = {
 				else
 					D = l.Value or ""
 				end
-				n.Text = (D == "" and "--" or D)
+				n.Text = tostring((D == "" and "--" or D))
 			end
 			function l.GetActiveValues(B)
 				if j.Multi then

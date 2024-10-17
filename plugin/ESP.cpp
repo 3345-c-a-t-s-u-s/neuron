@@ -5,6 +5,7 @@ ESP.Protect = (gethui and gethui()) or game:FindFirstChild('CoreGui') and cloner
 ESP.ScreenGui = Instance.new('ScreenGui',ESP.Protect)
 ESP.ScreenGui.ResetOnSpawn = false;
 ESP.ScreenGui.IgnoreGuiInset = true;
+ESP.Already = {};
 
 function ESP:GetSize(Instance : Model & BasePart) : UDim2
 	if Instance:IsA('BasePart') then
@@ -115,6 +116,7 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 
 	ESP:Smooth(TextLabel,{TextTransparency = 0,TextStrokeTransparency = 0.800})
 	
+    ESP.Already[Block] = BillboardGui;
 	table.insert(ESP.Memory,BillboardGui);
 	
 	if Section then

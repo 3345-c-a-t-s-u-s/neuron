@@ -127,7 +127,10 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 end;
 
 function ESP:ClearSection(section :string)
+    if not ESP[section] then return; end;
+
 	table.foreach(ESP[section],function(_,v)
+        ESP.Already[v] = nil;
 		v.Destroy(v);
 	end)
 	

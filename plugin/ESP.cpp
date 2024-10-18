@@ -118,8 +118,6 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 	
     ESP.Already[Block] = BillboardGui;
 	table.insert(ESP.Memory,BillboardGui);
-	
-    ESP.SectionDebug[Section][BillboardGui] = Block;
 
 	if Section then
 		table.insert(ESP[Section],BillboardGui)	

@@ -6,7 +6,6 @@ ESP.ScreenGui = Instance.new('ScreenGui',ESP.Protect)
 ESP.ScreenGui.ResetOnSpawn = false;
 ESP.ScreenGui.IgnoreGuiInset = true;
 ESP.Already = {};
-ESP.SectionDebug = {};
 
 function ESP:GetSize(Instance : Model & BasePart) : UDim2
 	if Instance:IsA('BasePart') then
@@ -33,7 +32,6 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 	if Section then
 		if not ESP[Section] then
 			ESP[Section] = {};
-            ESP.SectionDebug[Section] = {};
 		end;
 	end;
 	
@@ -134,15 +132,13 @@ function ESP:ClearSection(section :string)
     if not ESP[section] then return; end;
 
 	table.foreach(ESP[section],function(a,v)
-		v.Destroy(v);
-
-        if ESP.SectionDebug[section] and ESP.SectionDebug[section][v] then
-            ESP.Already[ESP.SectionDebug[section][v]] = nil;
-            ESP.SectionDebug[section][v] = nil;
+        if v.Adornee then
+            ESP.Already[v.Adornee] = nil;
         end;
+
+		v.Destroy(v);
 	end)
 	
-    ESP.SectionDebug[section] = {};
 	ESP[section] = {};
 end;
 
@@ -162,9 +158,11 @@ spawn(function() -- runtime
     while true do task.wait();
         
         for i,v in pairs(ESP.Memory) do task.wait()
-            if not v.Adornee then
-                v.Destroy(v);
-            end;
+            pcall(function()
+                if not v.Adornee then
+                    v.Destroy(v);
+                end;
+            end);
         end;
 
         task.wait();

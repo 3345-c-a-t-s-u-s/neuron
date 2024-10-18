@@ -130,7 +130,7 @@ function ESP:ClearSection(section :string)
     if not ESP[section] then return; end;
 
 	table.foreach(ESP[section],function(_,v)
-        ESP.Already[v] = nil;
+        ESP.Already[_] = nil;
 		v.Destroy(v);
 	end)
 	
@@ -148,5 +148,18 @@ function ESP:GetNilAdornee() : {BillboardGui}
 	
 	return Blocks;
 end;
+
+spawn(function() -- runtime
+    while true do task.wait();
+        
+        for i,v in pairs(ESP.Memory) do task.wait()
+            if not v.Adornee then
+                v.Destroy(v);
+            end;
+        end;
+
+        task.wait();
+    end;
+end);
 
 return ESP;

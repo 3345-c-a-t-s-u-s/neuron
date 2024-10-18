@@ -160,6 +160,7 @@ spawn(function() -- runtime
         for i,v in pairs(ESP.Memory) do task.wait()
             pcall(function()
                 if not v.Adornee then
+                    ESP.Already[v.Adornee] = nil;
                     v.Destroy(v);
                 end;
             end);

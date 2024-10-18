@@ -6,6 +6,7 @@ ESP.ScreenGui = Instance.new('ScreenGui',ESP.Protect)
 ESP.ScreenGui.ResetOnSpawn = false;
 ESP.ScreenGui.IgnoreGuiInset = true;
 ESP.Already = {};
+ESP.SectionDebug = {};
 
 function ESP:GetSize(Instance : Model & BasePart) : UDim2
 	if Instance:IsA('BasePart') then
@@ -32,6 +33,7 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 	if Section then
 		if not ESP[Section] then
 			ESP[Section] = {};
+            ESP.SectionDebug[Section] = {};
 		end;
 	end;
 	
@@ -119,6 +121,8 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
     ESP.Already[Block] = BillboardGui;
 	table.insert(ESP.Memory,BillboardGui);
 	
+    ESP.SectionDebug[Section][BillboardGui] = Block;
+
 	if Section then
 		table.insert(ESP[Section],BillboardGui)	
 	end;
@@ -129,11 +133,16 @@ end;
 function ESP:ClearSection(section :string)
     if not ESP[section] then return; end;
 
-	table.foreach(ESP[section],function(_,v)
-        ESP.Already[_] = nil;
+	table.foreach(ESP[section],function(a,v)
 		v.Destroy(v);
+
+        if ESP.SectionDebug[section] and ESP.SectionDebug[section][v] then
+            ESP.Already[ESP.SectionDebug[section][v]] = nil;
+            ESP.SectionDebug[section][v] = nil;
+        end;
 	end)
 	
+    ESP.SectionDebug[section] = {};
 	ESP[section] = {};
 end;
 

@@ -168,11 +168,6 @@ spawn(function() -- runtime
             pcall(function()
                 if not v.Adornee then
                     ESP.Already[v.Adornee] = nil;
-
-                    if ESP.DeletedFunction[v.Adornee] then
-                        task.spawn(pcall,ESP.DeletedFunction[v.Adornee]);
-                    end;
-
                     v.Destroy(v);
                 end;
             end);

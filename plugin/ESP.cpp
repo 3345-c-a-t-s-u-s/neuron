@@ -6,6 +6,7 @@ ESP.ScreenGui = Instance.new('ScreenGui',ESP.Protect)
 ESP.ScreenGui.ResetOnSpawn = false;
 ESP.ScreenGui.IgnoreGuiInset = true;
 ESP.Already = {};
+ESP.DeletedFunction = {};
 
 function ESP:GetSize(Instance : Model & BasePart) : UDim2
 	if Instance:IsA('BasePart') then
@@ -21,7 +22,7 @@ function ESP:Smooth(Object,Properties) : ()
 	game:GetService('TweenService'):Create(Object,TweenInfo.new(0.2),Properties):Play()
 end;
 
-function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :string) : BillboardGui
+function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :string, DeleteCallback : FunctionalTest) : BillboardGui
 	if not Block then
 		return;
 	end;
@@ -35,6 +36,10 @@ function ESP:Create(Block :BasePart , Color :Color3 ,Title :string, Section :str
 		end;
 	end;
 	
+    if DeleteCallback then
+        ESP.DeletedFunction[Block] = DeleteCallback;
+    end;
+
 	local BillboardGui = Instance.new("BillboardGui")
 	local Left = Instance.new("Frame")
 	local Right = Instance.new("Frame")
@@ -131,6 +136,10 @@ function ESP:ClearSection(section :string)
 
 	table.foreach(ESP[section],function(a,v)
         if v.Adornee then
+            if ESP.DeletedFunction[v.Adornee] then
+                pcall(ESP.DeletedFunction[v.Adornee]);
+            end;
+
             ESP.Already[v.Adornee] = nil;
         end;
 
@@ -159,6 +168,11 @@ spawn(function() -- runtime
             pcall(function()
                 if not v.Adornee then
                     ESP.Already[v.Adornee] = nil;
+
+                    if ESP.DeletedFunction[v.Adornee] then
+                        task.spawn(pcall,ESP.DeletedFunction[v.Adornee]);
+                    end;
+
                     v.Destroy(v);
                 end;
             end);
